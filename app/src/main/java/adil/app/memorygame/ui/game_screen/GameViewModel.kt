@@ -1,16 +1,21 @@
 package adil.app.memorygame.ui.game_screen
 
+import adil.app.memorygame.data.local.db.DatabaseService
+import adil.app.memorygame.data.local.db.entity.User
 import adil.app.memorygame.data.model.Card
+import adil.app.memorygame.data.repository.UserRepository
 import adil.app.memorygame.utils.CardsProvider
+import android.app.Application
 import android.view.View
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.room.Room
 
 /**
  * Created by Adil on 28/05/2021
  */
 
-class GameViewModel : ViewModel() {
+class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Variables for saving the first and the second card,
@@ -38,17 +43,16 @@ class GameViewModel : ViewModel() {
     private var score = 0
 
     /**
-     * setting up the first and the second card and matching when two cards are chosen.
+     * Repository to store player in the database.
      */
-    fun chooseCard(position: Int, card: Card, view: View) {
-        if (firstCard == null) {
-            firstCard = card
-            firstPos = position
-        } else if (secondCard == null) {
-            secondCard = card
-            secondPos = position
-            checkForMatch()
-        }
+    var repository: UserRepository
+    var db: DatabaseService = Room.databaseBuilder(
+        application,
+        DatabaseService::class.java, "game_db"
+    ).build()
+
+    init {
+        repository = UserRepository(db)
     }
 
     /**
@@ -105,6 +109,46 @@ class GameViewModel : ViewModel() {
         secondPos = -1
     }
 
+    /**
+     * The method tells us if all the cards are facing up and hence the game is completed.
+     */
+    private fun doAllCardsFaceUp(): Boolean = (cards.find { !it.isFaceUp }) == null
+
+    /**
+     * Incrementing the score if player gets a right match and
+     * deducting the score if the player selects a wrong pair.
+     */
+    private fun incrementScore() = run { score += 2 }
+    private fun decrementScore() = run { score -= 1 }
+
+    /**
+     * setting up the first and the second card and matching when two cards are chosen.
+     */
+    fun chooseCard(position: Int, card: Card, view: View) {
+        if (firstCard == null) {
+            firstCard = card
+            firstPos = position
+        } else if (secondCard == null) {
+            secondCard = card
+            secondPos = position
+            checkForMatch()
+        }
+    }
+
+    /**
+     * Returns the current score of the player
+     */
+    fun getScore():Int = score
+
+    /**
+     * Saving the player in database after he completes the game.
+     */
+    fun saveUserInDb(name: String, score: Int): Long =
+        repository.savePlayer(User(name = name, score = score))
+
+    /**
+     * Reset the game to the very initial stage.
+     */
     fun resetGame() {
         resetAllData()
         score = 0
@@ -113,22 +157,5 @@ class GameViewModel : ViewModel() {
             it.isFaceUp = false
         }
     }
-
-    /**
-     * The method tells us if all the cards are facing up and hence the game is completed.
-     */
-    private fun doAllCardsFaceUp(): Boolean = (cards.find { !it.isFaceUp }) == null
-
-    /**
-     * Returns the current score of the player
-     */
-    fun getScore():Int = score
-
-    /**
-     * Incrementing the score if player gets a right match and
-     * deducting the score if the player selects a wrong pair.
-     */
-    private fun incrementScore() = run { score += 2 }
-    private fun decrementScore() = run { score -= 1 }
 
 }

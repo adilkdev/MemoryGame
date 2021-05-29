@@ -9,7 +9,10 @@ import kotlinx.coroutines.runBlocking
 
 class UserRepository(private val databaseService: DatabaseService) {
 
-    fun saveUser(user: User): Long {
+    /**
+     * saving the player in the database
+     */
+    fun savePlayer(user: User): Long {
         var id = -1L
         runBlocking(Dispatchers.IO) {
             id = databaseService.userDao().insert(user)
@@ -17,7 +20,10 @@ class UserRepository(private val databaseService: DatabaseService) {
         return id
     }
 
-    fun getAllUsers(): List<User> {
+    /**
+     * fetching the list of all the players from the database
+     */
+    fun getAllPlayers(): List<User> {
         lateinit var  list: List<User>
         runBlocking(Dispatchers.IO) {
             list = databaseService.userDao().getAllUsers()

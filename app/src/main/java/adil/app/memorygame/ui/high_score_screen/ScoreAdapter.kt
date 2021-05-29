@@ -25,8 +25,10 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder {
-        return ScoreViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_score, parent, false))
+        return ScoreViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_score, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
@@ -35,16 +37,22 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
         holder.binding.textViewName.text = score.name
         holder.binding.textViewScore.text = score.score.toString()
 
+        /**
+         * if the player is highlighted, item's background is changed to teal colour otherwise
+         * there's no need to set colour.
+         */
         if (score.shouldHighlight) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                holder.binding.rootLayout.setBackgroundColor(holder.binding.rootLayout.context
-                    .getColor(R.color.color_score_highlight))
+                holder.binding.rootLayout.setBackgroundColor(
+                    holder.binding.rootLayout.context
+                        .getColor(R.color.color_score_highlight)
+                )
             } else {
                 holder.binding.rootLayout.setBackgroundColor(R.color.color_score_highlight)
             }
         } else {
-                holder.binding.rootLayout.setBackgroundColor(Color.TRANSPARENT)
-            }
+            holder.binding.rootLayout.setBackgroundColor(Color.TRANSPARENT)
+        }
     }
 
     override fun getItemCount(): Int = scores.size

@@ -1,19 +1,29 @@
 package adil.app.memorygame.ui.high_score_screen
 
+import adil.app.memorygame.data.local.db.DatabaseService
 import adil.app.memorygame.data.local.db.entity.User
 import adil.app.memorygame.data.repository.UserRepository
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
 
-class HighScoreViewModel: ViewModel() {
+class HighScoreViewModel(application: Application): AndroidViewModel(application) {
 
-    private lateinit var repository: UserRepository
+    private var repository: UserRepository
 
-    fun setTheRepository(repository: UserRepository) {
-        this.repository = repository
+    private val db = Room.databaseBuilder(
+        application,
+        DatabaseService::class.java, "game_db"
+    ).build()
+
+    init {
+        repository = UserRepository(db)
     }
 
-    fun getAllUsers(): List<User> = setRankToAllUsers(repository.getAllUsers())
-
+    /**
+     * Ranking all the players based on their scores
+     */
     private fun setRankToAllUsers(users: List<User>): List<User> {
         val list = users.sortedByDescending { it.score }
         var prevRank = 1
@@ -30,6 +40,11 @@ class HighScoreViewModel: ViewModel() {
         }
         return list
     }
+
+    /**
+     * Fetching the list of players
+     */
+    fun getAllPlayers(): List<User> = setRankToAllUsers(repository.getAllPlayers())
 
 
 }

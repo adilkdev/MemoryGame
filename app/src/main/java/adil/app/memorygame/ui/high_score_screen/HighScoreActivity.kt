@@ -1,33 +1,26 @@
 package adil.app.memorygame.ui.high_score_screen
 
 
-import adil.app.memorygame.data.local.db.DatabaseService
-import adil.app.memorygame.data.local.db.entity.User
-import adil.app.memorygame.data.repository.UserRepository
 import adil.app.memorygame.databinding.ActivityScoresBinding
-import adil.app.memorygame.ui.game_screen.GameViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
 
 class HighScoreActivity: AppCompatActivity() {
 
+    /**
+     * view binding, view model, card adapter and highlighted player variable to store if the player is
+     * being sent to this activity on finishing the game, to let him view the stats.
+     */
     private lateinit var binding: ActivityScoresBinding
     private lateinit var viewModel: HighScoreViewModel
     private lateinit var scoreAdapter: ScoreAdapter
-    var highlightedUserPosition: Int? = null
+    private var highlightedPlayerPosition: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val db = Room.databaseBuilder(
-            applicationContext,
-            DatabaseService::class.java, "game_db"
-        ).build()
-        var repo = UserRepository(db)
         viewModel = ViewModelProvider(this).get(HighScoreViewModel::class.java)
-        viewModel.setTheRepository(repo)
 
         binding = ActivityScoresBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
@@ -37,7 +30,7 @@ class HighScoreActivity: AppCompatActivity() {
 
     private fun setup() {
         scoreAdapter = ScoreAdapter()
-        scoreAdapter.setScoreData(viewModel.getAllUsers())
+        scoreAdapter.setScoreData(viewModel.getAllPlayers())
         binding.recyclerviewScore.adapter = scoreAdapter
 
         binding.imageViewBack.setOnClickListener {
@@ -47,12 +40,15 @@ class HighScoreActivity: AppCompatActivity() {
         scrollToShowUserHisStats()
     }
 
+    /**
+     * This method fetches the position where the player is mentioned and scrolls to that position.
+     */
     private fun scrollToShowUserHisStats() {
         val uid = intent.getLongExtra("user_id", -1L)
         if (uid != -1L) {
-            val user = viewModel.getAllUsers().find { it.uid ==  uid}
+            val user = viewModel.getAllPlayers().find { it.uid ==  uid}
             user?.let {
-                val index = viewModel.getAllUsers().indexOf(user)
+                val index = viewModel.getAllPlayers().indexOf(user)
                 if(index != -1) {
                     scoreAdapter.highlightUser(index)
                     binding.recyclerviewScore.scrollToPosition(index)
@@ -61,12 +57,16 @@ class HighScoreActivity: AppCompatActivity() {
         }
     }
 
+    /**
+     * If the player is highlighted, when the user leaves the activity
+     * we are setting the highlighted player to normal.
+     */
     override fun onDestroy() {
         super.onDestroy()
-        highlightedUserPosition?.let {
-            viewModel.getAllUsers()[it].shouldHighlight = false
+        highlightedPlayerPosition?.let {
+            viewModel.getAllPlayers()[it].shouldHighlight = false
         }
-        highlightedUserPosition = null
+        highlightedPlayerPosition = null
     }
 
 }

@@ -27,17 +27,20 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
      *  Click listener for RecyclerView, reference to list of cards and an instance of Vibrator.
      */
     private lateinit var clickListener: ClickListener
-    private lateinit var cards: List<Card>
+    private var cards = ArrayList<Card>()
     private var vibrator: Vibrator? = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
     /**
      * Initialising the cards and click listener.
      */
     fun setCards(cards: List<Card>) {
-        this.cards = cards
-        notifyDataSetChanged()
+        this.cards.addAll(cards)
+        notifyItemRangeInserted(0,16)
     }
 
+    /**
+     * On item click listener for our cards in the recyclerview
+     */
     fun setClickListener(clickListener: ClickListener) {
         this.clickListener = clickListener
     }

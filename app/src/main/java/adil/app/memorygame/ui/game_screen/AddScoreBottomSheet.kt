@@ -32,7 +32,7 @@ class AddScoreBottomSheet : BottomSheetDialogFragment() {
 
         binding.btnDone.setOnClickListener {
             if (binding.etName.text.toString().trim().isNotEmpty()) {
-                listener.onUserAdded(binding.etName.text.toString().trim())
+                listener.onAddUserButtonClicked(binding.etName.text.toString().trim())
                 dismiss()
             } else {
                showSnackbarAtTop("Name cannot be empty. Please fill name.")
@@ -41,6 +41,9 @@ class AddScoreBottomSheet : BottomSheetDialogFragment() {
         return view
     }
 
+    /**
+     * Method to show the snackbar at the top of the bottom sheet dialog.
+     */
     private fun showSnackbarAtTop(text: String) {
         val snackBarView = Snackbar.make(binding.coordinatorLayout, text , 900)
         val view = snackBarView.view
@@ -55,5 +58,5 @@ class AddScoreBottomSheet : BottomSheetDialogFragment() {
 }
 
 interface AddUserListener {
-    fun onUserAdded(name: String)
+    fun onAddUserButtonClicked(name: String)
 }

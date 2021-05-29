@@ -1,9 +1,6 @@
 package adil.app.memorygame.ui.game_screen
 
-import adil.app.memorygame.data.local.db.DatabaseService
-import adil.app.memorygame.data.local.db.entity.User
 import adil.app.memorygame.data.model.Card
-import adil.app.memorygame.data.repository.UserRepository
 import adil.app.memorygame.databinding.ActivityGameBinding
 import adil.app.memorygame.ui.high_score_screen.HighScoreActivity
 import adil.app.memorygame.utils.VerticalSpaceItemDecorator
@@ -17,7 +14,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.room.Room
 
 /**
  * Created by Adil on 28/05/2021
@@ -31,8 +27,6 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
     private lateinit var binding: ActivityGameBinding
     private lateinit var viewModel: GameViewModel
     private lateinit var gameCardAdapter: GameCardAdapter
-
-    private lateinit var repo: UserRepository
 
     private var isResetPending = false
 
@@ -52,16 +46,37 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
         binding.textViewScoresBtn.setOnClickListener {
             startActivity(Intent(this, HighScoreActivity::class.java))
         }
+    }
 
-        val db = Room.databaseBuilder(
-            applicationContext,
-            DatabaseService::class.java, "game_db"
-        ).build()
-        repo = UserRepository(db)
-
-        repo.getAllUsers().forEach {
-            println("${it.name} -> ${it.uid}")
+    /**
+     * Resetting the game after the user has returned from the score activity on completing the game.
+     */
+    override fun onResume() {
+        super.onResume()
+        if (isResetPending) {
+            resetGameAfterUserIsAdded()
+            isResetPending = false
         }
+    }
+
+    /**
+     * Callbacks of the card on the user interaction.
+     */
+    override fun onCardFaceUp(position: Int, card: Card, view: View) {
+        viewModel.chooseCard(position, card, view)
+    }
+
+    override fun onCardFaceDown(position: Int, card: Card, view: View) {
+
+    }
+
+    /**
+     * Callback on clicking the add button from the bottom sheet dialog.
+     */
+    override fun onAddUserButtonClicked(name: String) {
+        val userId = viewModel.saveUserInDb(name, viewModel.getScore())
+        isResetPending = true
+        showUserTheStatsAfterGameCompletion(userId)
     }
 
     /**
@@ -119,9 +134,9 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
         binding.textViewScore.text = "Score : ${viewModel.getScore()}"
 
         view.text = text
-        view.alpha = 1.0f;
-        view.scaleX = 1.0f;
-        view.scaleY = 1.0f;
+        view.alpha = 1.0f
+        view.scaleX = 1.0f
+        view.scaleY = 1.0f
         view.animate()
             .alpha(0.0f)
             .scaleX(2.0f).scaleY(2.0f)
@@ -161,41 +176,24 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
         )
     }
 
+    /**
+     * Resetting the game
+     */
     private fun resetGameAfterUserIsAdded() {
         viewModel.resetGame()
         Handler().postDelayed({
-            gameCardAdapter.notifyItemRangeChanged(0, 16)
+            binding.recyclerviewGame.adapter = null
+            setupRecyclerView()
             binding.textViewScore.text = "Score : ${viewModel.getScore()}"
-        },1000)
-    }
-
-    private fun showUserTheStatsAfterGameCompletion(userId: Long) {
-        startActivity(Intent(this, HighScoreActivity::class.java).putExtra("user_id", userId))
+        },300)
     }
 
     /**
-     * Callbacks of the card on the user interaction.
+     * Once the player completes the game and finishes entering his name for saving in database,
+     * we need to show him his stats i.e. scores and ranks.
      */
-    override fun onCardFaceUp(position: Int, card: Card, view: View) {
-        viewModel.chooseCard(position, card, view)
-    }
-
-    override fun onCardFaceDown(position: Int, card: Card, view: View) {
-
-    }
-
-    override fun onUserAdded(name: String) {
-        val userId = repo.saveUser(User(name = name, score = viewModel.getScore()))
-        isResetPending = true
-        showUserTheStatsAfterGameCompletion(userId)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (isResetPending) {
-            resetGameAfterUserIsAdded()
-            isResetPending = false
-        }
+    private fun showUserTheStatsAfterGameCompletion(userId: Long) {
+        startActivity(Intent(this, HighScoreActivity::class.java).putExtra("user_id", userId))
     }
 
 }
