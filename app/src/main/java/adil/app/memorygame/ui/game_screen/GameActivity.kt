@@ -1,25 +1,29 @@
 package adil.app.memorygame.ui.game_screen
 
+import adil.app.memorygame.data.local.db.DatabaseService
+import adil.app.memorygame.data.local.db.entity.User
 import adil.app.memorygame.data.model.Card
+import adil.app.memorygame.data.repository.UserRepository
 import adil.app.memorygame.databinding.ActivityGameBinding
+import adil.app.memorygame.ui.high_score_screen.HighScoreActivity
 import adil.app.memorygame.utils.VerticalSpaceItemDecorator
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.room.Room
 
 /**
  * Created by Adil on 28/05/2021
  */
 
-class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
+class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUserListener {
 
     /**
      * View binding, view model and game card adapter
@@ -27,6 +31,8 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
     private lateinit var binding: ActivityGameBinding
     private lateinit var viewModel: GameViewModel
     private lateinit var gameCardAdapter: GameCardAdapter
+
+    lateinit var repo: UserRepository
 
     /**
      * onCreate is a one time called method so all the initialization setup is being done here
@@ -42,8 +48,17 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
         setupObservers()
 
         binding.textViewScoresBtn.setOnClickListener {
-            val bottomSheet = AddScoreBottomSheet()
-            bottomSheet.show(supportFragmentManager, "add_score_sheet")
+            startActivity(Intent(this, HighScoreActivity::class.java))
+        }
+
+        val db = Room.databaseBuilder(
+            applicationContext,
+            DatabaseService::class.java, "game_db"
+        ).build()
+        repo = UserRepository(db)
+
+        repo.getAllUsers().forEach {
+            println("${it.name} -> ${it.score}")
         }
     }
 
@@ -99,7 +114,10 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
         })
 
         viewModel.isGameComplete.observe(this, {
-            Log.e("TAG", "complete ${viewModel.getScore()}")
+            val bottomSheet = AddScoreBottomSheet()
+            bottomSheet.listener = this
+            bottomSheet.isCancelable = false
+            bottomSheet.show(supportFragmentManager, "add_score_sheet")
         })
     }
 
@@ -152,6 +170,14 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
         )
     }
 
+    private fun resetGameAfterIsAdded() {
+        viewModel.resetGame()
+        Handler().postDelayed({
+            gameCardAdapter.notifyItemRangeChanged(0, 16)
+            binding.textViewScore.text = "Score : ${viewModel.getScore()}"
+        },1000)
+    }
+
     /**
      * Callbacks of the card on the user interaction.
      */
@@ -161,6 +187,11 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
 
     override fun onCardFaceDown(position: Int, card: Card, view: View) {
 
+    }
+
+    override fun onUserAdded(name: String) {
+        repo.saveUser(User(name = name, score = viewModel.getScore()))
+        resetGameAfterIsAdded()
     }
 
 }

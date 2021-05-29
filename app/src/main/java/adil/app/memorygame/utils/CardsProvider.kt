@@ -1,6 +1,7 @@
-package adil.app.memorygame.data.model
+package adil.app.memorygame.utils
 
 import adil.app.memorygame.R
+import adil.app.memorygame.data.model.Card
 
 object CardsProvider {
 

@@ -1,7 +1,7 @@
 package adil.app.memorygame.ui.game_screen
 
 import adil.app.memorygame.data.model.Card
-import adil.app.memorygame.data.model.CardsProvider
+import adil.app.memorygame.utils.CardsProvider
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -119,6 +119,15 @@ class GameViewModel : ViewModel() {
         secondCard = null
         firstPos = -1
         secondPos = -1
+    }
+
+    fun resetGame() {
+        resetAllData()
+        score = 0
+        cards.map {
+            it.isMatched = false
+            it.isFaceUp = false
+        }
     }
 
     /**

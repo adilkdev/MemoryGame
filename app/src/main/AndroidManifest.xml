@@ -10,13 +10,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MemoryGame">
-        <activity android:name=".ui.game_screen.GameActivity">
+        <activity android:name=".ui.game_screen.GameActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.high_score_screen.HighScoreActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
