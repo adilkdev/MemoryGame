@@ -27,17 +27,19 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/textViewScore"
             android:layout_weight="1"
             android:layout_marginTop="24dp"
-            android:text="Score : 12"
+            android:text="Score : 0"
             android:textAlignment="center"
             android:fontFamily="@font/comic_sans_ms"
-            android:textColor="#C9D4D9"
+            android:textColor="@color/color_white"
             android:textSize="18sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:id="@+id/textViewScoresBtn"
             android:layout_weight="1"
             android:clickable="true"
             android:elevation="4dp"
@@ -51,7 +53,7 @@
             android:textAlignment="center"
             android:textStyle="bold"
             android:fontFamily="@font/comic_sans_ms"
-            android:textColor="#C9D4D9"
+            android:textColor="@color/color_white"
             android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
@@ -126,5 +128,19 @@
             android:layout_height="wrap_content">
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textViewScoreOnMove"
+        android:textSize="45sp"
+        android:text=""
+        android:textColor="@color/color_action_bar"
+        android:fontFamily="@font/comic_sans_ms"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

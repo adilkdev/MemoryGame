@@ -5,8 +5,12 @@ import adil.app.memorygame.databinding.ActivityGameBinding
 import adil.app.memorygame.utils.VerticalSpaceItemDecorator
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,13 +39,18 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
         setContentView(binding.root)
 
         setupRecyclerView()
-
         setupObservers()
+
+        binding.textViewScoresBtn.setOnClickListener {
+            val bottomSheet = AddScoreBottomSheet()
+            bottomSheet.show(supportFragmentManager, "add_score_sheet")
+        }
     }
 
     /**
      * Setting up the view models used in the activity, which observe and notify whenever
      * there's a change in their value, to update the UI accordingly.
+     * When the game is completed, view model notifies here with isGameComplete livedata.
      */
     private fun setupObservers() {
         viewModel.itemToReset.observe(this, {
@@ -52,12 +61,26 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
                 binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
             } as GameCardAdapter.GameItemViewHolder
             setCardToBeTouchable(false)
-
             Handler().postDelayed({
                 viewHolder1.hideCard()
                 viewHolder2.hideCard()
                 setCardToBeTouchable(true)
             }, 1000)
+
+            animateScoreOnMove(binding.textViewScoreOnMove, "-1")
+        })
+
+        viewModel.singleItemReset.observe(this, {
+            val viewHolder1 = it?.let { position ->
+                binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
+            } as GameCardAdapter.GameItemViewHolder
+            setCardToBeTouchable(false)
+            Handler().postDelayed({
+                viewHolder1.hideCard()
+                setCardToBeTouchable(true)
+            }, 1000)
+
+            animateScoreOnMove(binding.textViewScoreOnMove, "0")
         })
 
         viewModel.pairMatched.observe(this, {
@@ -71,7 +94,31 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener {
                 viewHolder1.disableCard()
                 viewHolder2.disableCard()
             }, 300)
+
+            animateScoreOnMove(binding.textViewScoreOnMove, "+2")
         })
+
+        viewModel.isGameComplete.observe(this, {
+            Log.e("TAG", "complete ${viewModel.getScore()}")
+        })
+    }
+
+    /**
+     * Animating Score on each match
+     */
+    private fun animateScoreOnMove(view: TextView, text: String) {
+        binding.textViewScore.text = "Score : ${viewModel.getScore()}"
+
+        view.text = text
+        view.alpha = 1.0f;
+        view.scaleX = 1.0f;
+        view.scaleY = 1.0f;
+        view.animate()
+            .alpha(0.0f)
+            .scaleX(2.0f).scaleY(2.0f)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .setDuration(1000)
+            .start()
     }
 
     /**

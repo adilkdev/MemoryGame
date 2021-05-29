@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Memory Game</string>
+    <string name="form_username">Enter Your Name</string>
 </resources>

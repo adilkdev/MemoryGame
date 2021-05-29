@@ -12,4 +12,9 @@
     <color name="color_action_bar">#173542</color>
     <color name="color_btn_high_score">#14917C</color>
     <color name="color_recyclerview_game_bg">#F4F4F4</color>
+    <color name="color_white">#fafbfc</color>
+    <color name="color_text_hint">#9A9E9F</color>
+    <color name="color_text_hint_title">#4B5153</color>
+    <color name="color_editext_grey_bg">#DDE2E3</color>
+    <color name="color_black">#000000</color>
 </resources>

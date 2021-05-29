@@ -166,7 +166,7 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
          * Once the card is matched the user need not to interact with it,so it is shown as a faded view.
          */
         fun disableCard() {
-            rootLayout.alpha = 0.3f
+            rootLayout.alpha = 0.4f
         }
 
     }
