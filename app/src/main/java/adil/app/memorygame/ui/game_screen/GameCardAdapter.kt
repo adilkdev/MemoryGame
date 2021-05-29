@@ -10,6 +10,7 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -90,7 +91,7 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
          */
         init {
             rootLayout.setOnClickListener {
-                if (isAnimationFinished && isClickAllowed && !cards[bindingAdapterPosition].isMatched) {
+                if (isAnimationFinished && isClickAllowed && !cards[bindingAdapterPosition].isFaceUp && !cards[bindingAdapterPosition].isMatched) {
                     if (cards[bindingAdapterPosition].isFaceUp) {
                         hideCard()
                         vibrator!!.vibrate(50)
@@ -166,7 +167,13 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
          * Once the card is matched the user need not to interact with it,so it is shown as a faded view.
          */
         fun disableCard() {
-            rootLayout.alpha = 0.4f
+            rootLayout.animate()
+                .alpha(0.0f)
+                .scaleX(0.0f).scaleY(0.0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .setDuration(300)
+                .start()
+            rootLayout.alpha = 0f
         }
 
     }

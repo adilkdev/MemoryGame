@@ -28,7 +28,6 @@ class GameViewModel : ViewModel() {
      * 2. disable cards on correct match
      * 3. when the game is completed.
      */
-    var singleItemReset = MutableLiveData<Int>()
     var itemToReset = MutableLiveData<HashMap<Int, Int>>()
     var pairMatched = MutableLiveData<HashMap<Int, Int>>()
     var isGameComplete = MutableLiveData<Boolean>()
@@ -48,16 +47,8 @@ class GameViewModel : ViewModel() {
         } else if (secondCard == null) {
             secondCard = card
             secondPos = position
-            checkIfBothAreSame()
-        }
-    }
-
-    private fun checkIfBothAreSame() {
-        if (firstCard?.id == secondCard?.id)
-            resetCardWithNoScore()
-            //resetCards()
-        else
             checkForMatch()
+        }
     }
 
     /**
@@ -83,13 +74,6 @@ class GameViewModel : ViewModel() {
         hashMap[1] = firstPos
         hashMap[2] = secondPos
         itemToReset.postValue(hashMap)
-        resetAllData()
-    }
-
-    private fun resetCardWithNoScore() {
-        cards[firstPos].isFaceUp = false
-        cards[secondPos].isFaceUp = false
-        singleItemReset.postValue(firstPos)
         resetAllData()
     }
 

@@ -131,6 +131,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:elevation="5dp"
         android:id="@+id/textViewScoreOnMove"
         android:textSize="45sp"
         android:text=""

@@ -12,5 +12,5 @@ interface UserDao {
     suspend fun getAllUsers(): List<User>
 
     @Insert
-    suspend fun insert(user: User)
+    suspend fun insert(user: User): Long
 }

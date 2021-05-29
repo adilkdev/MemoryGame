@@ -11,6 +11,7 @@
     <color name="gradient_ldark_shade">#DCE2E9</color>
     <color name="color_action_bar">#173542</color>
     <color name="color_btn_high_score">#14917C</color>
+    <color name="color_score_highlight">#A2EDE0</color>
     <color name="color_recyclerview_game_bg">#F4F4F4</color>
     <color name="color_white">#fafbfc</color>
     <color name="color_text_hint">#9A9E9F</color>

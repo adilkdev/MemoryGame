@@ -4,15 +4,20 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:lottie_rawRes="@raw/colorful_confetti"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_rawRes="@raw/colorful_confetti"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <TextView
         android:textSize="25sp"
@@ -21,7 +26,7 @@
         android:textStyle="bold"
         android:letterSpacing="0.1"
         android:textAlignment="center"
-        android:text="Congratulations\nYou Won"
+        android:text="Congratulations \n You Won"
         app:layout_constraintVertical_bias="0.2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

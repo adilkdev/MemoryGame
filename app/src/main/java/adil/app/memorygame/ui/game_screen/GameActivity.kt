@@ -32,7 +32,9 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
     private lateinit var viewModel: GameViewModel
     private lateinit var gameCardAdapter: GameCardAdapter
 
-    lateinit var repo: UserRepository
+    private lateinit var repo: UserRepository
+
+    private var isResetPending = false
 
     /**
      * onCreate is a one time called method so all the initialization setup is being done here
@@ -58,7 +60,7 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
         repo = UserRepository(db)
 
         repo.getAllUsers().forEach {
-            println("${it.name} -> ${it.score}")
+            println("${it.name} -> ${it.uid}")
         }
     }
 
@@ -85,19 +87,6 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
             animateScoreOnMove(binding.textViewScoreOnMove, "-1")
         })
 
-        viewModel.singleItemReset.observe(this, {
-            val viewHolder1 = it?.let { position ->
-                binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
-            } as GameCardAdapter.GameItemViewHolder
-            setCardToBeTouchable(false)
-            Handler().postDelayed({
-                viewHolder1.hideCard()
-                setCardToBeTouchable(true)
-            }, 1000)
-
-            animateScoreOnMove(binding.textViewScoreOnMove, "0")
-        })
-
         viewModel.pairMatched.observe(this, {
             val viewHolder1 = it[1]?.let { position ->
                 binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
@@ -114,10 +103,12 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
         })
 
         viewModel.isGameComplete.observe(this, {
-            val bottomSheet = AddScoreBottomSheet()
-            bottomSheet.listener = this
-            bottomSheet.isCancelable = false
-            bottomSheet.show(supportFragmentManager, "add_score_sheet")
+            Handler().postDelayed({
+                val bottomSheet = AddScoreBottomSheet()
+                bottomSheet.listener = this
+                bottomSheet.isCancelable = false
+                bottomSheet.show(supportFragmentManager, "add_score_sheet")
+            }, 700)
         })
     }
 
@@ -170,12 +161,16 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
         )
     }
 
-    private fun resetGameAfterIsAdded() {
+    private fun resetGameAfterUserIsAdded() {
         viewModel.resetGame()
         Handler().postDelayed({
             gameCardAdapter.notifyItemRangeChanged(0, 16)
             binding.textViewScore.text = "Score : ${viewModel.getScore()}"
         },1000)
+    }
+
+    private fun showUserTheStatsAfterGameCompletion(userId: Long) {
+        startActivity(Intent(this, HighScoreActivity::class.java).putExtra("user_id", userId))
     }
 
     /**
@@ -190,8 +185,17 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
     }
 
     override fun onUserAdded(name: String) {
-        repo.saveUser(User(name = name, score = viewModel.getScore()))
-        resetGameAfterIsAdded()
+        val userId = repo.saveUser(User(name = name, score = viewModel.getScore()))
+        isResetPending = true
+        showUserTheStatsAfterGameCompletion(userId)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isResetPending) {
+            resetGameAfterUserIsAdded()
+            isResetPending = false
+        }
     }
 
 }

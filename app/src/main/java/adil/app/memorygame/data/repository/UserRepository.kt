@@ -9,10 +9,12 @@ import kotlinx.coroutines.runBlocking
 
 class UserRepository(private val databaseService: DatabaseService) {
 
-    fun saveUser(user: User) {
-        CoroutineScope(Dispatchers.IO).launch {
-            databaseService.userDao().insert(user)
+    fun saveUser(user: User): Long {
+        var id = -1L
+        runBlocking(Dispatchers.IO) {
+            id = databaseService.userDao().insert(user)
         }
+        return id
     }
 
     fun getAllUsers(): List<User> {

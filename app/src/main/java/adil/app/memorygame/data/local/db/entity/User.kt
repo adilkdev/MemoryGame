@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class User(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val uid: Int = 0,
+    val uid: Long = 0,
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -20,4 +20,7 @@ data class User(
 
     @Ignore
     var rank: Int = 0
+
+    @Ignore
+    var shouldHighlight: Boolean = false
 }
