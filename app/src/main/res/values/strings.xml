@@ -17,6 +17,8 @@
     <string name="rank_heading">Rank</string>
     <string name="player_name_heading">Player name</string>
     <string name="score_heading">Score</string>
+
+    <!-- General strings -->
     <string name="face_up">face up</string>
     <string name="face_down">face down</string>
 </resources>
