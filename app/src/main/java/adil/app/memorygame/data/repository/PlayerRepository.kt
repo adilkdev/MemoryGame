@@ -12,22 +12,21 @@ class PlayerRepository(private val databaseService: DatabaseService) {
      * @param players is the list of players who completed the game
      * @return is the list of players sorted as per their rank.
      */
-    private fun setRankToAllUsers(players: List<Player>): List<Player> {
-        val list = players.sortedByDescending { it.score }
-        var prevRank = 1
-        var prevScore = Int.MIN_VALUE
-        list.map { user ->
-            when {
-                prevScore == Int.MIN_VALUE -> {
-                    user.rank = prevRank
+    private fun setRankToAllUsers(players: List<Player>): List<Player> =
+        players.sortedByDescending { it.score }.also {
+            var prevRank = 1
+            var prevScore = Int.MIN_VALUE
+            it.map { player ->
+                when {
+                    prevScore == Int.MIN_VALUE -> {
+                        player.rank = prevRank
+                    }
+                    player.score == prevScore -> player.rank = prevRank
+                    else -> player.rank = ++prevRank
                 }
-                user.score == prevScore -> user.rank = prevRank
-                else -> user.rank = ++prevRank
+                prevScore = player.score
             }
-            prevScore = user.score
         }
-        return list
-    }
 
     /**
      * saving the player in the database
@@ -49,9 +48,11 @@ class PlayerRepository(private val databaseService: DatabaseService) {
     fun getAllPlayers(): List<Player> {
         lateinit var list: List<Player>
         runBlocking(Dispatchers.IO) {
-            list = databaseService.userDao().getAllUsers()
+            list = databaseService.userDao().getAllUsers().also {
+                setRankToAllUsers(it)
+            }
         }
-        return setRankToAllUsers(list)
+        return list
     }
 
 }

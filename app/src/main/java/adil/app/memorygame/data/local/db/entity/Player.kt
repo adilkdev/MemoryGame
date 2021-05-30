@@ -17,7 +17,6 @@ data class Player(
     @ColumnInfo(name = "score")
     val score: Int
 ) {
-
     @Ignore
     var rank: Int = 0
 
