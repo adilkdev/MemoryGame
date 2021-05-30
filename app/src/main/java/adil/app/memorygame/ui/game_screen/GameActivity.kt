@@ -183,7 +183,7 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
                 .alpha(0.0f)
                 .scaleX(2.0f).scaleY(2.0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(1000)
+                .setDuration(AppConstants.DURATION_TO_VIEW_CARD)
                 .start()
         }
     }
@@ -217,7 +217,7 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
             setupRecyclerView()
 
             binding.textViewScore.text = getString(R.string.score, viewModel.getScore())
-        }, 300)
+        }, AppConstants.DURATION_GAME_RESET)
     }
 
     /**

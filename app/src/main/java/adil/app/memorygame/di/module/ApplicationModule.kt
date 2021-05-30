@@ -3,6 +3,7 @@ package adil.app.memorygame.di.module
 import adil.app.memorygame.data.local.db.DatabaseService
 import adil.app.memorygame.data.model.Card
 import adil.app.memorygame.data.repository.PlayerRepository
+import adil.app.memorygame.utils.AppConstants
 import adil.app.memorygame.utils.CardsProvider
 import android.content.Context
 import androidx.room.Room
@@ -21,7 +22,7 @@ object ApplicationModule {
     fun provideDatabaseService(@ApplicationContext appContext: Context): DatabaseService =
         Room.databaseBuilder(
             appContext,
-            DatabaseService::class.java, "game_db"
+            DatabaseService::class.java, AppConstants.DATABASE_NAME
         ).build()
 
     @Provides

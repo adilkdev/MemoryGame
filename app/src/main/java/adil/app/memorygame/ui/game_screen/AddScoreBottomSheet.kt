@@ -53,7 +53,7 @@ class AddScoreBottomSheet : BottomSheetDialogFragment() {
         view.background = ContextCompat.getDrawable(
             requireContext(),
             R.drawable.snackbar_bg
-        ) // for custom background
+        )
         snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
         snackBarView.show()
     }

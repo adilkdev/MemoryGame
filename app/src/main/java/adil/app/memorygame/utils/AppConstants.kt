@@ -2,6 +2,8 @@ package adil.app.memorygame.utils
 
 object AppConstants {
 
+    const val DATABASE_NAME = "game_db"
+
     const val GRID_COUNT = 4
 
     const val VERTICAL_SPACING_BETWEEN_CARDS = 8
@@ -29,6 +31,8 @@ object AppConstants {
     const val DURATION_CARD_REMOVAL = 300L
 
     const val DURATION_WAIT_TO_OPEN_BOTTOM_SHEET = 700L
+
+    const val DURATION_GAME_RESET = 300L
 
     const val SNACKBAR_DURATION = 900
 
