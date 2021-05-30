@@ -21,4 +21,6 @@
     <!-- General strings -->
     <string name="face_up">face up</string>
     <string name="face_down">face down</string>
+
+    <string name="tag_add_score_bottom_sheet">add_score_sheet</string>
 </resources>

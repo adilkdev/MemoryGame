@@ -2,6 +2,7 @@ package adil.app.memorygame.ui.game_screen
 
 import adil.app.memorygame.R
 import adil.app.memorygame.databinding.BottomSheetScoreBinding
+import adil.app.memorygame.utils.AppConstants
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -43,7 +44,8 @@ class AddScoreBottomSheet : BottomSheetDialogFragment() {
      * @param text is the message to be displayed by the snackbar.
      */
     private fun showSnackbarAtTop(text: String) {
-        val snackBarView = Snackbar.make(binding.coordinatorLayout, text, 900)
+        val snackBarView =
+            Snackbar.make(binding.coordinatorLayout, text, AppConstants.SNACKBAR_DURATION)
         val view = snackBarView.view
         val params = view.layoutParams as CoordinatorLayout.LayoutParams
         params.gravity = Gravity.TOP

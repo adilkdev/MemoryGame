@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 
 @Suppress("DEPRECATION")
-class GameCardAdapter(val context: Context, var cards: List<Card>) :
+class GameCardAdapter(context: Context, private var cards: List<Card>) :
     RecyclerView.Adapter<GameCardAdapter.GameItemViewHolder>() {
 
     /**
@@ -195,7 +195,7 @@ class GameCardAdapter(val context: Context, var cards: List<Card>) :
                 .alpha(0.0f)
                 .scaleX(0.0f).scaleY(0.0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(300)
+                .setDuration(AppConstants.DURATION_CARD_REMOVAL)
                 .start()
             rootLayout.alpha = 0f
         }

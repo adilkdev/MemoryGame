@@ -51,12 +51,11 @@ class HighScoreActivity : AppCompatActivity() {
      * and recyclerview scrolls to that position.
      */
     private fun scrollToShowUserHisStats() {
-        val uid = intent.getLongExtra(AppConstants.PLAYER_ID, -1L)
+        val uid = intent.getLongExtra(AppConstants.PLAYER_ID, AppConstants.DEFAULT_UID)
         if (uid != -1L) {
-            val user = viewModel.getAllPlayers().find { it.uid == uid }
-            user?.let {
-                val index = viewModel.getAllPlayers().indexOf(user)
-                if (index != -1) {
+            viewModel.getAllPlayers().find { it.uid == uid }?.let { player ->
+                val index = viewModel.getAllPlayers().indexOf(player)
+                if (index != AppConstants.DEFAULT_UID.toInt()) {
                     scoreAdapter.highlightPlayer(index)
                     binding.recyclerviewScore.scrollToPosition(index)
                 }
@@ -73,7 +72,6 @@ class HighScoreActivity : AppCompatActivity() {
         highlightedPlayerPosition?.let {
             viewModel.getAllPlayers()[it].shouldHighlight = false
         }
-        highlightedPlayerPosition = null
     }
 
 }

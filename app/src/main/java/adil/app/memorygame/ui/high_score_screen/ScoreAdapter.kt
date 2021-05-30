@@ -11,7 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class ScoreAdapter(private var scores: List<Player>) : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
+class ScoreAdapter(private var scores: List<Player>) :
+    RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
     /**
      * highlighting the player only when he's navigated to scores screen

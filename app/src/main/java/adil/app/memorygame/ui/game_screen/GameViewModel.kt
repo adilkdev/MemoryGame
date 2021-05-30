@@ -34,7 +34,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
      * 3. when the game is completed.
      */
     var itemToReset = MutableLiveData<HashMap<String, Int>>()
-    var pairMatched = MutableLiveData<HashMap<Int, Int>>()
+    var pairMatched = MutableLiveData<HashMap<String, Int>>()
     var isGameComplete = MutableLiveData<Boolean>()
 
     /**
@@ -64,13 +64,10 @@ class GameViewModel @Inject constructor() : ViewModel() {
      * This is done by informing the activity through livedata where the UI based changes are needed.
      */
     private fun resetCards() {
-        decrementScore()
+        updateScore(AppConstants.OPERATION_DECREMENT)
         cards[firstPos].isFaceUp = false
         cards[secondPos].isFaceUp = false
-        val hashMap = hashMapOf<String, Int>()
-        hashMap["first_card_position"] = firstPos
-        hashMap["second_card_position"] = secondPos
-        itemToReset.postValue(hashMap)
+        itemToReset.postValue(getHashMapOfCardPositions())
         resetAllData()
     }
 
@@ -79,18 +76,24 @@ class GameViewModel @Inject constructor() : ViewModel() {
      * where the UI based changes are needed.
      */
     private fun matched() {
-        incrementScore()
+        updateScore(AppConstants.OPERATION_INCREMENT)
         cards[firstPos].isMatched = true
         cards[secondPos].isMatched = true
-        val hashMap = hashMapOf<Int, Int>()
-        hashMap[1] = firstPos
-        hashMap[2] = secondPos
-        pairMatched.postValue(hashMap)
+        pairMatched.postValue(getHashMapOfCardPositions())
         resetAllData()
 
         if (doAllCardsFaceUp())
             isGameComplete.postValue(true)
     }
+
+    /**
+     * Helper method which @return a hash map of first and second card position.
+     */
+    private fun getHashMapOfCardPositions(): HashMap<String, Int> =
+        hashMapOf<String, Int>().apply {
+            this[AppConstants.FIRST_CARD_POSITION] = firstPos
+            this[AppConstants.SECOND_CARD_POSITION] = secondPos
+        }
 
     /**
      * Resetting all the variables to their initial state.
@@ -113,8 +116,11 @@ class GameViewModel @Inject constructor() : ViewModel() {
      * Incrementing the score if player gets a right match and
      * deducting the score if the player selects a wrong pair.
      */
-    private fun incrementScore() = run { score += AppConstants.POINTS_SCORED }
-    private fun decrementScore() = run { score -= AppConstants.POINTS_LOST }
+    private fun updateScore(opcode: Int) =
+        run {
+            score += if (opcode == AppConstants.OPERATION_INCREMENT) AppConstants.POINTS_SCORED
+            else AppConstants.POINTS_LOST
+        }
 
     /**
      * setting up the first and the second card and matching when two cards are chosen.

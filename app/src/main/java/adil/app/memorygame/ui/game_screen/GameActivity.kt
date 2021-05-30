@@ -104,44 +104,47 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
      */
     private fun setupObservers() {
         viewModel.itemToReset.observe(this, {
-            val firstCardViewHolder = it["first_card_position"]?.let { position ->
+            val firstCardViewHolder = it[AppConstants.FIRST_CARD_POSITION]?.let { position ->
                 binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
             } as GameCardAdapter.GameItemViewHolder
-            val secondCardViewHolder = it["second_card_position"]?.let { position ->
+            val secondCardViewHolder = it[AppConstants.SECOND_CARD_POSITION]?.let { position ->
                 binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
             } as GameCardAdapter.GameItemViewHolder
+
             setCardToBeTouchable(false)
             Handler(Looper.getMainLooper()).postDelayed({
                 firstCardViewHolder.hideCard()
                 secondCardViewHolder.hideCard()
                 setCardToBeTouchable(true)
-            }, 1000)
+            }, AppConstants.DURATION_TO_VIEW_CARD)
 
-            animateScoreOnMove(binding.textViewScoreOnMove, "-${AppConstants.POINTS_LOST}")
+            animateScoreOnMove(binding.textViewScoreOnMove, "${AppConstants.POINTS_LOST}")
         })
 
         viewModel.pairMatched.observe(this, {
-            val viewHolder1 = it[1]?.let { position ->
+            val firstCardViewHolder = it[AppConstants.FIRST_CARD_POSITION]?.let { position ->
                 binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
             } as GameCardAdapter.GameItemViewHolder
-            val viewHolder2 = it[2]?.let { position ->
+            val secondCardViewHolder = it[AppConstants.SECOND_CARD_POSITION]?.let { position ->
                 binding.recyclerviewGame.findViewHolderForAdapterPosition(position)
             } as GameCardAdapter.GameItemViewHolder
+
             Handler(Looper.getMainLooper()).postDelayed({
-                viewHolder1.removeCard()
-                viewHolder2.removeCard()
-            }, 300)
+                firstCardViewHolder.removeCard()
+                secondCardViewHolder.removeCard()
+            }, AppConstants.DURATION_CARD_FLIP)
 
             animateScoreOnMove(binding.textViewScoreOnMove, "+${AppConstants.POINTS_SCORED}")
         })
 
         viewModel.isGameComplete.observe(this, {
             Handler(Looper.getMainLooper()).postDelayed({
-                val bottomSheet = AddScoreBottomSheet()
-                bottomSheet.listener = this
-                bottomSheet.isCancelable = false
-                bottomSheet.show(supportFragmentManager, "add_score_sheet")
-            }, 700)
+                AddScoreBottomSheet().also {
+                    it.listener = this
+                    it.isCancelable = false
+                    it.show(supportFragmentManager, getString(R.string.tag_add_score_bottom_sheet))
+                }
+            }, AppConstants.DURATION_WAIT_TO_OPEN_BOTTOM_SHEET)
         })
     }
 
@@ -152,13 +155,14 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
     private fun setupRecyclerView() {
         gameCardAdapter.setClickListener(this)
 
-        val gridLayoutManager = GridLayoutManager(this, AppConstants.GRID_COUNT)
-        binding.recyclerviewGame.layoutManager = gridLayoutManager
-        binding.recyclerviewGame.adapter = gameCardAdapter
+        GridLayoutManager(this, AppConstants.GRID_COUNT).also {
+            binding.recyclerviewGame.layoutManager = it
+            binding.recyclerviewGame.adapter = gameCardAdapter
 
-        binding.recyclerviewGame.addItemDecoration(
-            VerticalSpaceItemDecorator(AppConstants.VERTICAL_SPACING_BETWEEN_CARDS)
-        )
+            binding.recyclerviewGame.addItemDecoration(
+                VerticalSpaceItemDecorator(AppConstants.VERTICAL_SPACING_BETWEEN_CARDS)
+            )
+        }
     }
 
     /**
@@ -169,16 +173,19 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
     private fun animateScoreOnMove(view: TextView, text: String) {
         binding.textViewScore.text = getString(R.string.score, viewModel.getScore())
 
-        view.text = text
-        view.alpha = 1.0f
-        view.scaleX = 1.0f
-        view.scaleY = 1.0f
-        view.animate()
-            .alpha(0.0f)
-            .scaleX(2.0f).scaleY(2.0f)
-            .setInterpolator(AccelerateDecelerateInterpolator())
-            .setDuration(1000)
-            .start()
+        view.run {
+            this.text = text
+            this.alpha = 1.0f
+            this.scaleX = 1.0f
+            this.scaleY = 1.0f
+
+            this.animate()
+                .alpha(0.0f)
+                .scaleX(2.0f).scaleY(2.0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .setDuration(1000)
+                .start()
+        }
     }
 
     /**
