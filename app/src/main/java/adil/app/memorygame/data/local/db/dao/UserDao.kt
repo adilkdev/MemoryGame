@@ -1,6 +1,6 @@
 package adil.app.memorygame.data.local.db.dao
 
-import adil.app.memorygame.data.local.db.entity.User
+import adil.app.memorygame.data.local.db.entity.Player
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,9 +8,9 @@ import androidx.room.Query
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM user")
-    suspend fun getAllUsers(): List<User>
+    @Query("SELECT * FROM player")
+    suspend fun getAllUsers(): List<Player>
 
     @Insert
-    suspend fun insert(user: User): Long
+    suspend fun insert(user: Player): Long
 }

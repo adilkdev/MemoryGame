@@ -1,116 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_bg"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/gradient_bg">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/color_action_bar"
+    <View
+        android:id="@+id/topViewBg"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageViewBack"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/ic_baseline_arrow_back_ios_24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="0dp"
-            android:src="@drawable/logo"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        android:layout_height="@dimen/top_view_height"
+        android:background="@color/color_action_bar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing"
+        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+        app:layout_constraintBottom_toBottomOf="@+id/topViewBg"
+        app:layout_constraintLeft_toLeftOf="@+id/topViewBg"
+        app:layout_constraintTop_toTopOf="@+id/topViewBg" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="@dimen/high_score_logo_height"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="@+id/topViewBg"
+        app:layout_constraintLeft_toRightOf="@+id/imageViewBack"
+        app:layout_constraintTop_toTopOf="@+id/topViewBg" />
 
     <TextView
         android:id="@+id/textViewTitle"
+        android:layout_width="@dimen/zero"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comic_sans_ms"
+        android:letterSpacing="0.06"
+        android:paddingTop="@dimen/spacing"
+        android:paddingBottom="@dimen/spacing"
+        android:text="@string/high_scores"
+        android:textAlignment="center"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/medium_text_size_2"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:text="High Scores"
-        android:textAlignment="center"
-        android:fontFamily="@font/comic_sans_ms"
-        android:textColor="@color/color_white"
-        android:textStyle="bold"
-        android:textSize="17sp"
-        android:letterSpacing="0.06"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewRank"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/color_action_bar"
         android:fontFamily="@font/comic_sans_ms"
-        android:paddingVertical="10dp"
-        android:text="Rank"
         android:letterSpacing="0.2"
+        android:paddingVertical="@dimen/half_spacing_high"
+        android:paddingTop="@dimen/low_spacing"
+        android:text="@string/rank_heading"
         android:textAlignment="center"
         android:textColor="@color/color_white"
-        android:textSize="15sp"
+        android:textSize="@dimen/medium_text_size_1"
         android:textStyle="bold"
-        android:background="@color/color_action_bar"
-        android:paddingTop="6dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toStartOf="@+id/textViewName"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topViewBg" />
 
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/color_action_bar"
         android:fontFamily="@font/comic_sans_ms"
-        android:paddingVertical="10dp"
-        android:text="Player name"
         android:letterSpacing="0.06"
+        android:paddingVertical="@dimen/half_spacing_high"
+        android:paddingTop="@dimen/low_spacing"
+        android:text="@string/player_name_heading"
         android:textAlignment="center"
         android:textColor="@color/color_white"
-        android:textSize="15sp"
+        android:textSize="@dimen/medium_text_size_1"
         android:textStyle="bold"
-        android:background="@color/color_action_bar"
-        android:paddingTop="6dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toStartOf="@+id/textViewScore"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="6"
-        app:layout_constraintStart_toEndOf="@+id/textViewRank" />
+        app:layout_constraintStart_toEndOf="@+id/textViewRank"
+        app:layout_constraintTop_toBottomOf="@+id/topViewBg" />
 
     <TextView
         android:id="@+id/textViewScore"
-        android:background="@color/color_action_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/color_action_bar"
         android:fontFamily="@font/comic_sans_ms"
-        android:paddingVertical="10dp"
-        android:text="Score"
+        android:paddingVertical="@dimen/half_spacing_high"
+        android:paddingTop="@dimen/low_spacing"
+        android:text="@string/score_heading"
         android:textAlignment="center"
         android:textColor="@color/color_white"
-        android:textSize="15sp"
+        android:textSize="@dimen/medium_text_size_1"
         android:textStyle="bold"
-        android:paddingTop="6dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toEndOf="@+id/textViewName" />
+        app:layout_constraintStart_toEndOf="@+id/textViewName"
+        app:layout_constraintTop_toBottomOf="@+id/topViewBg" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewScore"
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRank"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/textViewRank" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

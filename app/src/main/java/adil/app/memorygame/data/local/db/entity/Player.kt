@@ -6,7 +6,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
-data class User(
+data class Player(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val uid: Long = 0,

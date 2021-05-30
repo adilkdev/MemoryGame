@@ -1,27 +1,27 @@
 package adil.app.memorygame.ui.game_screen
 
-import adil.app.memorygame.data.local.db.DatabaseService
-import adil.app.memorygame.data.local.db.entity.User
+import adil.app.memorygame.data.local.db.entity.Player
 import adil.app.memorygame.data.model.Card
-import adil.app.memorygame.data.repository.UserRepository
-import adil.app.memorygame.utils.CardsProvider
-import android.app.Application
-import android.view.View
-import androidx.lifecycle.AndroidViewModel
+import adil.app.memorygame.data.repository.PlayerRepository
+import adil.app.memorygame.utils.AppConstants
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Room
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * Created by Adil on 28/05/2021
  */
+@HiltViewModel
+class GameViewModel @Inject constructor() : ViewModel() {
 
-class GameViewModel(application: Application) : AndroidViewModel(application) {
+    @Inject
+    lateinit var cards: List<Card>
 
     /**
      * Variables for saving the first and the second card,
      * which are to be matched, along with their positions.
      */
-    var cards = CardsProvider.cards()
     private var firstCard: Card? = null
     private var secondCard: Card? = null
     private var firstPos = -1
@@ -33,7 +33,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
      * 2. disable cards on correct match
      * 3. when the game is completed.
      */
-    var itemToReset = MutableLiveData<HashMap<Int, Int>>()
+    var itemToReset = MutableLiveData<HashMap<String, Int>>()
     var pairMatched = MutableLiveData<HashMap<Int, Int>>()
     var isGameComplete = MutableLiveData<Boolean>()
 
@@ -45,15 +45,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Repository to store player in the database.
      */
-    var repository: UserRepository
-    var db: DatabaseService = Room.databaseBuilder(
-        application,
-        DatabaseService::class.java, "game_db"
-    ).build()
-
-    init {
-        repository = UserRepository(db)
-    }
+    @Inject
+    lateinit var repository: PlayerRepository
 
     /**
      * Checking if the cards are of same colour.
@@ -68,22 +61,22 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * If the selected cards are of two different color, we reset the cards to their initial state, facing down.
-     * This is done by informing the activity where the UI based changes are made.
+     * This is done by informing the activity through livedata where the UI based changes are needed.
      */
     private fun resetCards() {
         decrementScore()
         cards[firstPos].isFaceUp = false
         cards[secondPos].isFaceUp = false
-        val hashMap = hashMapOf<Int, Int>()
-        hashMap[1] = firstPos
-        hashMap[2] = secondPos
+        val hashMap = hashMapOf<String, Int>()
+        hashMap["first_card_position"] = firstPos
+        hashMap["second_card_position"] = secondPos
         itemToReset.postValue(hashMap)
         resetAllData()
     }
 
     /**
-     * If the selected cards are of same color, we disable the card for future use by informing the activity
-     * where the UI based changes are made.
+     * If the selected cards are of same color, we remove the card from the board by informing the activity
+     * where the UI based changes are needed.
      */
     private fun matched() {
         incrementScore()
@@ -111,6 +104,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * The method tells us if all the cards are facing up and hence the game is completed.
+     * @return true means all cards are facing up and game is completed.
+     * @return false means some cards are still facing down and hence game is not complete.
      */
     private fun doAllCardsFaceUp(): Boolean = (cards.find { !it.isFaceUp }) == null
 
@@ -118,13 +113,15 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
      * Incrementing the score if player gets a right match and
      * deducting the score if the player selects a wrong pair.
      */
-    private fun incrementScore() = run { score += 2 }
-    private fun decrementScore() = run { score -= 1 }
+    private fun incrementScore() = run { score += AppConstants.POINTS_SCORED }
+    private fun decrementScore() = run { score -= AppConstants.POINTS_LOST }
 
     /**
      * setting up the first and the second card and matching when two cards are chosen.
+     * @param position of the card in the cards list
+     * @param card is the card item chosen.
      */
-    fun chooseCard(position: Int, card: Card, view: View) {
+    fun chooseCard(position: Int, card: Card) {
         if (firstCard == null) {
             firstCard = card
             firstPos = position
@@ -136,15 +133,19 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * Returns the current score of the player
+     * @returns the current score of the player
      */
-    fun getScore():Int = score
+    fun getScore(): Int = score
 
     /**
      * Saving the player in database after he completes the game.
+     * @param name is the name of the player
+     * @param score is the score achieved by the player.
+     * @return is the uid (unique player id) of the player which is an auto-incremented value
+     * generated by the database on storing a player.
      */
     fun saveUserInDb(name: String, score: Int): Long =
-        repository.savePlayer(User(name = name, score = score))
+        repository.savePlayer(Player(name = name, score = score))
 
     /**
      * Reset the game to the very initial stage.

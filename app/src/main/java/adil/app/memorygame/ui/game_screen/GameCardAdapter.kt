@@ -2,10 +2,13 @@ package adil.app.memorygame.ui.game_screen
 
 import adil.app.memorygame.R
 import adil.app.memorygame.data.model.Card
+import adil.app.memorygame.utils.AppConstants
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
@@ -19,24 +22,15 @@ import androidx.recyclerview.widget.RecyclerView
  * Created by Adil on 28/05/2021
  */
 
-class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.GameItemViewHolder>() {
-
-    private var mVibratePattern = longArrayOf(0, 50, 20, 50)
+@Suppress("DEPRECATION")
+class GameCardAdapter(val context: Context, var cards: List<Card>) :
+    RecyclerView.Adapter<GameCardAdapter.GameItemViewHolder>() {
 
     /**
-     *  Click listener for RecyclerView, reference to list of cards and an instance of Vibrator.
+     *  Click listener for RecyclerView and an instance of Vibrator.
      */
     private lateinit var clickListener: ClickListener
-    private var cards = ArrayList<Card>()
-    private var vibrator: Vibrator? = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-
-    /**
-     * Initialising the cards and click listener.
-     */
-    fun setCards(cards: List<Card>) {
-        this.cards.addAll(cards)
-        notifyItemRangeInserted(0,16)
-    }
+    private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     /**
      * On item click listener for our cards in the recyclerview
@@ -48,7 +42,8 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameItemViewHolder {
         return GameItemViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_card, parent, false),
-            cards = cards, vibrator = vibrator, clickListener = clickListener)
+            cards = cards, vibrator = vibrator, clickListener = clickListener
+        )
     }
 
     override fun onBindViewHolder(holder: GameItemViewHolder, position: Int) {
@@ -60,10 +55,15 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
     override fun getItemCount(): Int = cards.size
 
     /**
-     * Since all the items are shown at once and nothing is being recycled, touch and the card flip
-     * animation is performed in the view holder.
+     * Since all the items are shown at once and nothing is being recycled,
+     * touch handling and the card flip animation is performed in the view holder.
      */
-    class GameItemViewHolder(itemView: View, cards: List<Card>, clickListener: ClickListener, vibrator: Vibrator?) : RecyclerView.ViewHolder(itemView) {
+    class GameItemViewHolder(
+        itemView: View,
+        cards: List<Card>,
+        clickListener: ClickListener,
+        val vibrator: Vibrator
+    ) : RecyclerView.ViewHolder(itemView) {
         /**
          * Initialising the view components of the card
          */
@@ -94,24 +94,27 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
          */
         init {
             rootLayout.setOnClickListener {
-                if (isAnimationFinished && isClickAllowed && !cards[bindingAdapterPosition].isFaceUp && !cards[bindingAdapterPosition].isMatched) {
-                    if (cards[bindingAdapterPosition].isFaceUp) {
-                        hideCard()
-                        vibrator!!.vibrate(50)
-                        cards[bindingAdapterPosition].isFaceUp = !cards[bindingAdapterPosition].isFaceUp
-                        clickListener.onCardFaceDown(bindingAdapterPosition, cards[bindingAdapterPosition], itemView)
-                    } else {
+                if (isAnimationFinished && isClickAllowed &&
+                    !cards[bindingAdapterPosition].isFaceUp &&
+                    !cards[bindingAdapterPosition].isMatched
+                ) {
+                    if (!cards[bindingAdapterPosition].isFaceUp) {
                         showCard()
-                        vibrator!!.vibrate(50)
-                        cards[bindingAdapterPosition].isFaceUp = !cards[bindingAdapterPosition].isFaceUp
-                        clickListener.onCardFaceUp(bindingAdapterPosition, cards[bindingAdapterPosition], itemView)
+                        hapticFeedback(AppConstants.HAPTIC_TOUCH_DURATION)
+                        cards[bindingAdapterPosition].isFaceUp =
+                            !cards[bindingAdapterPosition].isFaceUp
+                        clickListener.onCardFaceUp(
+                            bindingAdapterPosition,
+                            cards[bindingAdapterPosition]
+                        )
                     }
                 }
             }
         }
 
         /**
-         * The card is facing down and we are running the animation to flip the background of the card with a fade out,
+         * The card is facing down and we are running the animation
+         * to flip the background of the card with a fade out,
          * at the same time flip the card content towards the screen to view with a fade in.
          */
         private fun showCard() {
@@ -139,7 +142,8 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
         }
 
         /**
-         * The card is facing up and we are running the animation to flip the content of the card with a fade out,
+         * The card is facing up and we are running the animation
+         * to flip the content of the card with a fade out,
          * at the same time flip the card background towards the screen to view with a fade in.
          */
         fun hideCard() {
@@ -167,9 +171,26 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
         }
 
         /**
-         * Once the card is matched the user need not to interact with it,so it is shown as a faded view.
+         * providing a haptic feedback on touching the card to face up.
+         * @param duration specifies the time duration for the vibration.
          */
-        fun disableCard() {
+        private fun hapticFeedback(duration: Long) =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        duration,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
+            } else {
+                vibrator.vibrate(duration)
+            }
+
+        /**
+         * Once the card is matched the user need not to interact with it,
+         * so it is hidden from the board.
+         */
+        fun removeCard() {
             rootLayout.animate()
                 .alpha(0.0f)
                 .scaleX(0.0f).scaleY(0.0f)
@@ -185,7 +206,7 @@ class GameCardAdapter(context: Context) : RecyclerView.Adapter<GameCardAdapter.G
      * This listener informs the activity when the card is performed face down and when it performed face up.
      */
     interface ClickListener {
-        fun onCardFaceUp(position: Int, card: Card, view: View)
-        fun onCardFaceDown(position: Int, card: Card, view: View)
+        fun onCardFaceUp(position: Int, card: Card)
+        fun onCardFaceDown(position: Int, card: Card)
     }
 }

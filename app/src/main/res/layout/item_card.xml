@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootLayout"
-    android:background="@android:color/transparent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
     <ImageView
         android:id="@+id/imageViewCardFront"
-        android:src="@drawable/colour1"
+        android:contentDescription="@string/face_up"
+        android:layout_width="@dimen/high_score_logo_height"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:alpha="0"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"/>
+        android:src="@drawable/colour1" />
+
     <ImageView
         android:id="@+id/imageViewCardBack"
-        android:src="@drawable/card_bg"
+        android:contentDescription="@string/face_down"
+        android:layout_width="@dimen/high_score_logo_height"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"/>
+        android:src="@drawable/card_bg" />
 </FrameLayout>

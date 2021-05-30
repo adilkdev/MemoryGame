@@ -1,8 +1,9 @@
 package adil.app.memorygame.ui.high_score_screen
 
 import adil.app.memorygame.R
-import adil.app.memorygame.data.local.db.entity.User
+import adil.app.memorygame.data.local.db.entity.Player
 import adil.app.memorygame.databinding.ItemScoreBinding
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
@@ -10,16 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
+class ScoreAdapter(private var scores: List<Player>) : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
-    private var scores: List<User> = listOf()
-
-    fun setScoreData(scores: List<User>) {
-        this.scores = scores
-        notifyDataSetChanged()
-    }
-
-    fun highlightUser(position: Int) {
+    /**
+     * highlighting the player only when he's navigated to scores screen
+     * to show him his stats
+     * @param position of the player to be highlighted.
+     */
+    fun highlightPlayer(position: Int) {
         scores[position].shouldHighlight = true
         notifyItemChanged(position)
     }
@@ -31,9 +30,11 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
         )
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
         val score = scores[position]
-        holder.binding.textViewRank.text = "#${score.rank}"
+        holder.binding.textViewRank.text =
+            holder.binding.root.context.getString(R.string.hash, score.rank)
         holder.binding.textViewName.text = score.name
         holder.binding.textViewScore.text = score.score.toString()
 

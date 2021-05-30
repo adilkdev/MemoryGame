@@ -1,50 +1,21 @@
 package adil.app.memorygame.ui.high_score_screen
 
-import adil.app.memorygame.data.local.db.DatabaseService
-import adil.app.memorygame.data.local.db.entity.User
-import adil.app.memorygame.data.repository.UserRepository
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import adil.app.memorygame.data.local.db.entity.Player
+import adil.app.memorygame.data.repository.PlayerRepository
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HighScoreViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class HighScoreViewModel @Inject constructor() : ViewModel() {
 
-    private var repository: UserRepository
-
-    private val db = Room.databaseBuilder(
-        application,
-        DatabaseService::class.java, "game_db"
-    ).build()
-
-    init {
-        repository = UserRepository(db)
-    }
-
-    /**
-     * Ranking all the players based on their scores
-     */
-    private fun setRankToAllUsers(users: List<User>): List<User> {
-        val list = users.sortedByDescending { it.score }
-        var prevRank = 1
-        var prevScore = Int.MIN_VALUE
-        list.map {user ->
-            when {
-                prevScore == Int.MIN_VALUE -> {
-                    user.rank = prevRank
-                }
-                user.score==prevScore -> user.rank = prevRank
-                else -> user.rank = ++prevRank
-            }
-            prevScore = user.score
-        }
-        return list
-    }
+    @Inject
+    lateinit var repository: PlayerRepository
 
     /**
      * Fetching the list of players
      */
-    fun getAllPlayers(): List<User> = setRankToAllUsers(repository.getAllPlayers())
+    fun getAllPlayers(): List<Player> = repository.getAllPlayers()
 
 
 }

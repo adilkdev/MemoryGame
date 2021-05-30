@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common values -->
+    <dimen name="low_spacing">6dp</dimen>
+    <dimen name="half_spacing">8dp</dimen>
+    <dimen name="half_spacing_high">10dp</dimen>
+    <dimen name="three_fourth_spacing">12dp</dimen>
+    <dimen name="spacing">16dp</dimen>
+    <dimen name="large_spacing_1">20dp</dimen>
+
+    <dimen name="medium_text_size_1">15sp</dimen>
+    <dimen name="medium_text_size_2">17sp</dimen>
+    <dimen name="large_text_size">22sp</dimen>
+    <dimen name="edit_text_size">16sp</dimen>
+
+
+    <!-- Game Activity -->
+    <dimen name="zero">0dp</dimen>
+    <dimen name="top_bar_height">72dp</dimen>
+
+    <dimen name="game_logo_width">80dp</dimen>
+
+    <dimen name="high_score_text_size">18sp</dimen>
+    <dimen name="high_score_btn_text_size">12sp</dimen>
+
+    <dimen name="board_elevation">4dp</dimen>
+
+    <dimen name="text_score_margin_bottom">60dp</dimen>
+    <dimen name="text_score_elevation">5dp</dimen>
+    <dimen name="text_score_text_size">45sp</dimen>
+    <dimen name="top_view_height">60dp</dimen>
+
+    <!-- High Score Activity -->
+    <dimen name="high_score_logo_height">70dp</dimen>
+
+    <!-- Bottom Sheet -->
+    <dimen name="bottom_sheet_height">400dp</dimen>
+
+
+</resources>

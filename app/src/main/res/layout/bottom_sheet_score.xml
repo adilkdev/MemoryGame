@@ -1,74 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="@dimen/bottom_sheet_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:lottie_rawRes="@raw/colorful_confetti"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true"/>
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/colorful_confetti" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <TextView
-        android:textSize="25sp"
-        android:textColor="@color/color_action_bar"
-        android:fontFamily="@font/comic_sans_ms"
-        android:textStyle="bold"
-        android:letterSpacing="0.1"
-        android:textAlignment="center"
-        android:text="Congratulations \n You Won"
-        app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comic_sans_ms"
+        android:letterSpacing="0.1"
+        android:text="@string/game_finished"
+        android:textAlignment="center"
+        android:textColor="@color/color_action_bar"
+        android:textSize="@dimen/large_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        app:layout_constraintBottom_toTopOf="@+id/btnDone"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="20dp"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/large_spacing_1"
+        android:layout_marginBottom="@dimen/large_spacing_1"
+        android:background="@drawable/bg_rounded_edittext"
+        android:paddingHorizontal="@dimen/half_spacing"
+        android:paddingVertical="@dimen/low_spacing"
         android:textColorHint="@color/color_text_hint"
         app:hintTextColor="@color/color_text_hint_title"
-        android:background="@drawable/bg_rounded_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        app:layout_constraintBottom_toTopOf="@+id/btnDone">
+
         <EditText
             android:id="@+id/etName"
+            android:autofillHints="Enter your Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comic_sans_ms"
+            android:hint="@string/form_username"
             android:inputType="text"
             android:maxLines="1"
-            android:hint="@string/form_username"
-            android:textSize="16sp"
             android:textColor="@color/color_black"
-            android:fontFamily="@font/comic_sans_ms"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textSize="@dimen/edit_text_size" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnDone"
-        android:text="Done"
-        android:textColor="@color/color_white"
-        android:fontFamily="@font/comic_sans_ms"
-        android:background="@color/color_action_bar"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@color/color_action_bar"
+        android:fontFamily="@font/comic_sans_ms"
+        android:text="@string/done"
+        android:textColor="@color/color_white"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

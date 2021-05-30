@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">Memory Game</string>
+
+    <!-- Game Activity -->
+    <string name="score">Score : %1$d</string>
+    <string name="game_finished">Congratualtions\nGame has Finished</string>
+    <string name="text_high_score_btn">High\nScores</string>
+
+    <!-- Bottom sheet -->
     <string name="form_username">Enter Your Name</string>
+    <string name="fill_name">"Name cannot be empty. Please fill name."</string>
+    <string name="done">Done</string>
+
+    <!-- High Score Activity -->
+    <string name="hash"># %1$d</string>
+    <string name="high_scores">High Scores</string>
+    <string name="rank_heading">Rank</string>
+    <string name="player_name_heading">Player name</string>
+    <string name="score_heading">Score</string>
+    <string name="face_up">face up</string>
+    <string name="face_down">face down</string>
 </resources>
