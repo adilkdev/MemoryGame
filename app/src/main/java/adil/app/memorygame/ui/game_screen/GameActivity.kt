@@ -12,6 +12,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
+import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -132,20 +134,50 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
             Handler(Looper.getMainLooper()).postDelayed({
                 firstCardViewHolder.removeCard()
                 secondCardViewHolder.removeCard()
-            }, AppConstants.DURATION_CARD_FLIP)
+            }, AppConstants.DURATION_DEFAULT_ANIMATION)
 
             animateScoreOnMove(binding.textViewScoreOnMove, "+${AppConstants.POINTS_SCORED}")
         })
 
         viewModel.isGameComplete.observe(this, {
+            hideBoardOnGameCompletion()
+            val bottomSheet = AddScoreBottomSheet().also {
+                it.listener = this
+                it.isCancelable = false
+            }
             Handler(Looper.getMainLooper()).postDelayed({
-                AddScoreBottomSheet().also {
-                    it.listener = this
-                    it.isCancelable = false
-                    it.show(supportFragmentManager, getString(R.string.tag_add_score_bottom_sheet))
-                }
+                bottomSheet.show(
+                    supportFragmentManager,
+                    getString(R.string.tag_add_score_bottom_sheet)
+                )
             }, AppConstants.DURATION_WAIT_TO_OPEN_BOTTOM_SHEET)
         })
+    }
+
+    /**
+     * Hides the board on Game completion
+     */
+    private fun hideBoardOnGameCompletion() {
+        binding.board
+            .animate()
+            .alpha(0f)
+            .setDuration(AppConstants.DURATION_DEFAULT_ANIMATION)
+            .start()
+    }
+
+    /**
+     * Shows the game board with an animation
+     */
+    private fun showBoardInitialAnimation() {
+        binding.board.scaleY = 0f
+        binding.board.alpha = 0f
+        binding.board.animate()
+            .setInterpolator(OvershootInterpolator())
+            .alpha(1f)
+            .scaleY(1f)
+            .setDuration(AppConstants.DURATION_BOARD_ANIMATION)
+            .setStartDelay(AppConstants.DURATION_DEFAULT_ANIMATION)
+            .start()
     }
 
     /**
@@ -155,14 +187,21 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
     private fun setupRecyclerView() {
         gameCardAdapter.setClickListener(this)
 
-        GridLayoutManager(this, AppConstants.GRID_COUNT).also {
-            binding.recyclerviewGame.layoutManager = it
-            binding.recyclerviewGame.adapter = gameCardAdapter
+        Handler(Looper.getMainLooper()).postDelayed({
+            GridLayoutManager(this, AppConstants.GRID_COUNT).also {
+                binding.recyclerviewGame.layoutManager = it
+                val layoutAnimation =
+                    AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fall_down)
+                binding.recyclerviewGame.layoutAnimation = layoutAnimation
+                binding.recyclerviewGame.adapter = gameCardAdapter
+                binding.recyclerviewGame.scheduleLayoutAnimation()
 
-            binding.recyclerviewGame.addItemDecoration(
-                VerticalSpaceItemDecorator(AppConstants.VERTICAL_SPACING_BETWEEN_CARDS)
-            )
-        }
+                binding.recyclerviewGame.addItemDecoration(
+                    VerticalSpaceItemDecorator(AppConstants.VERTICAL_SPACING_BETWEEN_CARDS)
+                )
+            }
+        }, AppConstants.DURATION_DEFAULT_ANIMATION)
+        showBoardInitialAnimation()
     }
 
     /**
@@ -207,17 +246,15 @@ class GameActivity : AppCompatActivity(), GameCardAdapter.ClickListener, AddUser
      */
     private fun resetGameAfterUserIsAdded() {
         viewModel.resetGame()
-        Handler(Looper.getMainLooper()).postDelayed({
-            /**
-             * We are manually resetting adapter so that recyclerview has to refresh,
-             * sometimes the recyclerview doesn't refresh even after using notifyDataSetChanged() method.
-             */
-            binding.recyclerviewGame.adapter = null
-            gameCardAdapter = GameCardAdapter(this, viewModel.cards)
-            setupRecyclerView()
+        /**
+         * We are manually resetting adapter so that recyclerview has to refresh,
+         * sometimes the recyclerview doesn't refresh even after using notifyDataSetChanged() method.
+         */
+        binding.recyclerviewGame.adapter = null
+        gameCardAdapter = GameCardAdapter(this, viewModel.cards)
+        setupRecyclerView()
 
-            binding.textViewScore.text = getString(R.string.score, viewModel.getScore())
-        }, AppConstants.DURATION_GAME_RESET)
+        binding.textViewScore.text = getString(R.string.score, viewModel.getScore())
     }
 
     /**

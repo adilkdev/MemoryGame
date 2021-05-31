@@ -56,6 +56,8 @@
         app:layout_constraintTop_toTopOf="@+id/topViewBg" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/board"
+        android:alpha="0"
         android:layout_width="@dimen/zero"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/three_fourth_spacing"
@@ -75,6 +77,7 @@
             android:layout_marginHorizontal="@dimen/half_spacing"
             android:layout_marginTop="@dimen/half_spacing"
             android:layout_marginBottom="@dimen/half_spacing_high"
+
             android:background="@android:color/transparent" />
     </androidx.cardview.widget.CardView>
 

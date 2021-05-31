@@ -195,7 +195,7 @@ class GameCardAdapter(context: Context, private var cards: List<Card>) :
                 .alpha(0.0f)
                 .scaleX(0.0f).scaleY(0.0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(AppConstants.DURATION_CARD_REMOVAL)
+                .setDuration(AppConstants.DURATION_DEFAULT_ANIMATION)
                 .start()
             rootLayout.alpha = 0f
         }

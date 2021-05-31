@@ -26,13 +26,11 @@ object AppConstants {
 
     const val DURATION_TO_VIEW_CARD = 1000L
 
-    const val DURATION_CARD_FLIP = 300L
+    const val DURATION_DEFAULT_ANIMATION = 300L
 
-    const val DURATION_CARD_REMOVAL = 300L
+    const val DURATION_BOARD_ANIMATION = 750L
 
-    const val DURATION_WAIT_TO_OPEN_BOTTOM_SHEET = 700L
-
-    const val DURATION_GAME_RESET = 300L
+    const val DURATION_WAIT_TO_OPEN_BOTTOM_SHEET = 300L
 
     const val SNACKBAR_DURATION = 900
 
