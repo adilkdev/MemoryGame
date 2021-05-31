@@ -51,7 +51,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
     /**
      * Checking if the cards are of same colour.
      */
-    private fun checkForMatch(firstCard: Card?, secondCard: Card?): Boolean =
+    fun checkForMatch(firstCard: Card?, secondCard: Card?): Boolean =
         firstCard?.colourId == secondCard?.colourId
 
     /**
@@ -116,13 +116,13 @@ class GameViewModel @Inject constructor() : ViewModel() {
      * @return true means all cards are facing up and game is completed.
      * @return false means some cards are still facing down and hence game is not complete.
      */
-    private fun doAllCardsFaceUp(): Boolean = (cards.find { !it.isFaceUp }) == null
+    fun doAllCardsFaceUp(): Boolean = (cards.find { !it.isFaceUp }) == null
 
     /**
      * Incrementing the score if player gets a right match and
      * deducting the score if the player selects a wrong pair.
      */
-    private fun updateScore(opcode: Int) =
+    fun updateScore(opcode: Int) =
         run {
             score += if (opcode == AppConstants.OPERATION_INCREMENT) AppConstants.POINTS_SCORED
             else AppConstants.POINTS_LOST

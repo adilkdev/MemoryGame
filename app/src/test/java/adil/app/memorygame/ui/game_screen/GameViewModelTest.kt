@@ -18,10 +18,6 @@ class GameViewModelTest {
         gameViewModel.cards = CardsProvider.cards()
     }
 
-    /**
-     * Uncomment the below code to run the tests.
-     * Also make the private function public so that tests can access those methods.
-     *
     @Test
     fun ifAllCardsFaceUp_returnsFalse() {
         gameViewModel.cards = CardsProvider.cards()
@@ -65,7 +61,5 @@ class GameViewModelTest {
         gameViewModel.updateScore(AppConstants.OPERATION_DECREMENT)
         assertThat(gameViewModel.getScore()).isEqualTo(score - 1)
     }
-
-    **/
 
 }

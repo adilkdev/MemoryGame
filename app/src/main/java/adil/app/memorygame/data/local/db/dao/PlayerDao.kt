@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface UserDao {
+interface PlayerDao {
 
     @Query("SELECT * FROM player")
     suspend fun getAllUsers(): List<Player>

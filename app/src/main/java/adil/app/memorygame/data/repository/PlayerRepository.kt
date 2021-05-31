@@ -36,7 +36,7 @@ class PlayerRepository(private val databaseService: DatabaseService) {
     fun savePlayer(player: Player): Long {
         var id: Long
         runBlocking(Dispatchers.IO) {
-            id = databaseService.userDao().insert(player)
+            id = databaseService.playerDao().insert(player)
         }
         return id
     }
@@ -47,7 +47,7 @@ class PlayerRepository(private val databaseService: DatabaseService) {
     fun getAllPlayers(): List<Player> {
         lateinit var list: List<Player>
         runBlocking(Dispatchers.IO) {
-            list = databaseService.userDao()
+            list = databaseService.playerDao()
                 .getAllUsers()
                 .setRankToAllUsers()
         }
