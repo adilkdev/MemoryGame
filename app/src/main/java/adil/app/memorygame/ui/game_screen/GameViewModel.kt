@@ -51,11 +51,17 @@ class GameViewModel @Inject constructor() : ViewModel() {
     /**
      * Checking if the cards are of same colour.
      */
-    private fun checkForMatch() {
-        if (firstCard?.colourId == secondCard?.colourId) {
-            matched()
-        } else {
-            resetCards()
+    private fun checkForMatch(firstCard: Card?, secondCard: Card?): Boolean =
+        firstCard?.colourId == secondCard?.colourId
+
+    /**
+     * perform the required action on the cards based on the result of the comparison.
+     */
+    private fun performActionOnTwoCards(firstCard: Card?, secondCard: Card?) {
+        firstCard?.let {
+            secondCard?.let {
+                if (checkForMatch(firstCard, secondCard)) matched() else resetCards()
+            }
         }
     }
 
@@ -134,7 +140,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
         } else if (secondCard == null) {
             secondCard = card
             secondPos = position
-            checkForMatch()
+            performActionOnTwoCards(firstCard, secondCard)
         }
     }
 
