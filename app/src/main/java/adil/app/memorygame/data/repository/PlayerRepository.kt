@@ -9,11 +9,10 @@ class PlayerRepository(private val databaseService: DatabaseService) {
 
     /**
      * Ranking all the players based on their scores
-     * @param players is the list of players who completed the game
      * @return is the list of players sorted as per their rank.
      */
-    private fun setRankToAllUsers(players: List<Player>): List<Player> =
-        players.sortedByDescending { it.score }.also {
+    private fun List<Player>.setRankToAllUsers(): List<Player> =
+        this.sortedByDescending { it.score }.also {
             var prevRank = 1
             var prevScore = Int.MIN_VALUE
             it.map { player ->
@@ -48,9 +47,9 @@ class PlayerRepository(private val databaseService: DatabaseService) {
     fun getAllPlayers(): List<Player> {
         lateinit var list: List<Player>
         runBlocking(Dispatchers.IO) {
-            list = databaseService.userDao().getAllUsers().also {
-                setRankToAllUsers(it)
-            }
+            list = databaseService.userDao()
+                .getAllUsers()
+                .setRankToAllUsers()
         }
         return list
     }
