@@ -83,9 +83,6 @@ boilerplate.
 
 • RecyclerView <br />
 `implementation("androidx.recyclerview:recyclerview:1.2.0")` <br />
-
-• ViewModel <br />
- `implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")` <br />
  
 # Unit Test 
 The test class is present in the project which tests the methods of game activity’s view model. <br />
