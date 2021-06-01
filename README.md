@@ -1,4 +1,4 @@
-# Colour Game
+# Colour Memory
 
 <img src="ui_design/MemoryGameUI.png" />
 
