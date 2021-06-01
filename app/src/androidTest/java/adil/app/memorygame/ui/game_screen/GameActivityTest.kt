@@ -21,6 +21,9 @@ class GameActivityTest {
     private val smallDelay = 500L
     private val largeDelay = 1000L
 
+    private val firstPosition = 0
+    private val secondPosition = 1
+
     @Test
     fun test_isActivityInView() {
         val activityScenario = ActivityScenario.launch(GameActivity::class.java)
@@ -51,14 +54,14 @@ class GameActivityTest {
         onView(isRoot()).perform(waitFor(largeDelay))
         onView(withId(R.id.recyclerviewGame)).perform(
             actionOnItemAtPosition<GameCardAdapter.GameItemViewHolder>(
-                0,
+                firstPosition,
                 click()
             )
         )
         onView(isRoot()).perform(waitFor(smallDelay))
         onView(withId(R.id.recyclerviewGame)).perform(
             actionOnItemAtPosition<GameCardAdapter.GameItemViewHolder>(
-                1,
+                secondPosition,
                 click()
             )
         )
