@@ -91,14 +91,17 @@ boilerplate.
 The test class is present in the project which tests the methods of game activity’s view model. <br />
 Unit test resides in this directory: <br />
 `app/src/test/java/adil/app/memorygame/ui/game_screen/GameViewModelTest` <br />
+[Go To Unit Test](https://github.com/adilkdev/MemoryGame/blob/master/app/src/test/java/adil/app/memorygame/ui/game_screen/GameViewModelTest.kt)
 
 # Instrumentation Test
 Instrumentation tests run on a device or an emulator and they can take advantage of the Android framework APIs. <br />
 Instrumented test resides in this directory: <br />
-`app/src/androidTest/java/adil/app/memorygame/data/local/db/dao/PlayerDaoTest`
+`app/src/androidTest/java/adil/app/memorygame/data/local/db/dao/PlayerDaoTest` <br />
+[Go To Instrumentation Test](https://github.com/adilkdev/MemoryGame/blob/master/app/src/androidTest/java/adil/app/memorygame/data/local/db/dao/PlayerDaoTest.kt)
 
 # UI Test
 Testing user interactions within a single app helps to ensure that users do not encounter unexpected results or have a poor
 experience when interacting with your app. Espresso is used for UI Testing. <br />
 UI test resides in this directory: <br />
-`app/src/androidTest/java/adil/app/memorygame/ui/game_screen/GameActivityTest`
+`app/src/androidTest/java/adil/app/memorygame/ui/game_screen/GameActivityTest` <br />
+[Go To UI Test](https://github.com/adilkdev/MemoryGame/blob/master/app/src/androidTest/java/adil/app/memorygame/ui/game_screen/GameActivityTest.kt)
