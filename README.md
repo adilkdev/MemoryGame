@@ -14,7 +14,7 @@ The player can also view his scores and rankings against other players.
 # Project Setup
 The remote repository of the app is available on the GitHub.
 Clone the repo, open the project in Android Studio, and Run.
-https://github.com/adilkdev/MemoryGame
+`https://github.com/adilkdev/MemoryGame.git`
 
 # Architecture
 Colour Memory app follows MVVM architecture to provide a clear flow of data and separation of components.
