@@ -64,7 +64,7 @@ class GameActivityTest {
     }
 
     @Test
-    fun test_doNotShowScoreWhenCardsNotChoosen() {
+    fun test_doNotShowScoreWhenCardsNotChosen() {
         val activityScenario = ActivityScenario.launch(GameActivity::class.java)
         onView(withId(R.id.textViewScoreOnMove)).check(matches(not(isDisplayed())))
     }
