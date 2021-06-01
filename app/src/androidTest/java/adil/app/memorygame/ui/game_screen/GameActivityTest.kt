@@ -18,6 +18,9 @@ import org.junit.runner.RunWith
 @LargeTest
 class GameActivityTest {
 
+    private val smallDelay = 500L
+    private val largeDelay = 1000L
+
     @Test
     fun test_isActivityInView() {
         val activityScenario = ActivityScenario.launch(GameActivity::class.java)
@@ -38,28 +41,28 @@ class GameActivityTest {
         onView(withId(R.id.recyclerviewScore)).check(matches(isDisplayed()))
 
         onView(withId(R.id.imageViewBack)).perform(click())
-        onView(isRoot()).perform(waitFor(1000))
+        onView(isRoot()).perform(waitFor(largeDelay))
         onView(withId(R.id.board)).check(matches(isDisplayed()))
     }
 
     @Test
     fun test_showScoreOnChoosingTwoCards() {
         val activityScenario = ActivityScenario.launch(GameActivity::class.java)
-        onView(isRoot()).perform(waitFor(1000))
+        onView(isRoot()).perform(waitFor(largeDelay))
         onView(withId(R.id.recyclerviewGame)).perform(
             actionOnItemAtPosition<GameCardAdapter.GameItemViewHolder>(
                 0,
                 click()
             )
         )
-        onView(isRoot()).perform(waitFor(500))
+        onView(isRoot()).perform(waitFor(smallDelay))
         onView(withId(R.id.recyclerviewGame)).perform(
             actionOnItemAtPosition<GameCardAdapter.GameItemViewHolder>(
                 1,
                 click()
             )
         )
-        onView(isRoot()).perform(waitFor(500))
+        onView(isRoot()).perform(waitFor(smallDelay))
         onView(withId(R.id.textViewScoreOnMove)).check(matches(isDisplayed()))
     }
 
