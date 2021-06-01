@@ -107,11 +107,11 @@
         app:layout_constraintStart_toEndOf="@+id/textViewName"
         app:layout_constraintTop_toBottomOf="@+id/topViewBg" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewScore"
         android:layout_width="@dimen/zero"
         android:layout_height="@dimen/zero"
+        android:layoutAnimation="@anim/layout_fall_down"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

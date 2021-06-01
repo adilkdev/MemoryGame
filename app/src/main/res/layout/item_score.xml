@@ -64,7 +64,7 @@
 
     <View
         android:layout_width="wrap_content"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginStart="@dimen/top_view_height"
         android:layout_marginTop="@dimen/spacing"
         android:background="@color/color_separator_grey"

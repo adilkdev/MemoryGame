@@ -57,10 +57,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/board"
-        android:alpha="0"
         android:layout_width="@dimen/zero"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/three_fourth_spacing"
+        android:alpha="0"
         app:cardBackgroundColor="@color/color_recyclerview_game_bg"
         app:cardCornerRadius="@dimen/three_fourth_spacing"
         app:cardElevation="@dimen/board_elevation"
