@@ -6,7 +6,7 @@ import adil.app.memorygame.data.model.Card
 object CardsProvider {
 
     /**
-     * @return This method provides the list of cards for the game.
+     * @return provides the list of cards for the game.
      */
     fun cards(): List<Card> = listOf(
         Card(1, false, R.drawable.colour1, R.drawable.card_bg, false),

@@ -42,7 +42,7 @@ class PlayerDaoTest {
     }
 
     @Test
-    fun insertPlayer() = runBlockingTest {
+    fun test_insertPlayer() = runBlockingTest {
         val player = Player(1, "adil", 10)
         playerDao.insert(player)
 

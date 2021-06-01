@@ -49,14 +49,14 @@ class GameViewModelTest {
     }
 
     @Test
-    fun updateScoreByIncrement() {
+    fun updateScoreByIncrement_incrementsScore() {
         val score = gameViewModel.getScore()
         gameViewModel.updateScore(AppConstants.OPERATION_INCREMENT)
         assertThat(gameViewModel.getScore()).isEqualTo(score + 2)
     }
 
     @Test
-    fun updateScoreByDecrement() {
+    fun updateScoreByDecrement_decrementsScore() {
         val score = gameViewModel.getScore()
         gameViewModel.updateScore(AppConstants.OPERATION_DECREMENT)
         assertThat(gameViewModel.getScore()).isEqualTo(score - 1)
