@@ -61,7 +61,6 @@ class GameActivityTest {
         )
         onView(isRoot()).perform(waitFor(500))
         onView(withId(R.id.textViewScoreOnMove)).check(matches(isDisplayed()))
-        //BaseRobot().assertOnView(withId(R.id.textViewScoreOnMove), matches(isDisplayed()))
     }
 
     @Test
