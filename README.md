@@ -6,7 +6,7 @@
 https://user-images.githubusercontent.com/46744851/155340680-74f833ec-5f81-4bbe-8144-ca05c61cc1fb.mp4
 
 
-[https://drive.google.com/file/d/1_MchBJgF1D2dDDXEUBTZ-MPYpEb0mRue/view?usp=sharing](Download the apk)
+[Download the apk](https://drive.google.com/file/d/1_MchBJgF1D2dDDXEUBTZ-MPYpEb0mRue/view?usp=sharing)
 
 Colour Memory is an Android app consisting of a board which displays eight pairs of cards where each pair is of different colour. 
 A player has to touch the cards to view the colours and match all the pairs. 
